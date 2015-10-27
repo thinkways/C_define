@@ -35,7 +35,11 @@ int getword(char *word,int len,FILE *fp){
 		return word[0];
 	}
 	if(ch=='/'){
-		ugetc(comment(igetc(fp),fp));
+		int tmp=comment(igetc(fp),fp);
+		if(!tmp)
+			*s='\0';
+		else
+			ugetc(tmp);
 	}
 	*++s='\0';
 	return word[0];
@@ -47,6 +51,7 @@ int comment(int ch,FILE *fp){
 	if(ch=='/'){
 		while((ch=igetc(fp))!='\n'&&ch!=EOF)
 			;
+		return 0;
 	}else if(ch=='*'){
 		a=igetc(fp);
 		b=igetc(fp);
@@ -54,6 +59,7 @@ int comment(int ch,FILE *fp){
 			a=b;
 			b=igetc(fp);	
 		}
+		return 0;
 	}
 	return ch;
 }
